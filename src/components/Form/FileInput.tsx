@@ -2,7 +2,7 @@ import { Button, Icon } from '@chakra-ui/react';
 import { ChangeEvent, useRef } from 'react';
 import { RiFileUploadFill } from "react-icons/ri"
 
-export interface UiFileInputButtonProps {
+export interface FileInputProps {
   acceptedFileTypes?: string;
   allowMultipleFiles?: boolean;
   label: string;
@@ -10,8 +10,8 @@ export interface UiFileInputButtonProps {
   uploadFileName: string;
 }
 
-export const FileInputButton = 
-  ({ label, onChange, uploadFileName, acceptedFileTypes, allowMultipleFiles}: UiFileInputButtonProps) => {
+export const FileInput =
+  ({ label, onChange, uploadFileName, acceptedFileTypes, allowMultipleFiles}: FileInputProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -65,7 +65,7 @@ export const FileInputButton =
   );
 };
 
-FileInputButton.defaultProps = {
+FileInput.defaultProps = {
   acceptedFileTypes: '',
   allowMultipleFiles: false,
 };

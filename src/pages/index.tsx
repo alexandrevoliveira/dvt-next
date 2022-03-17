@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { PageCompose } from "../components/Compose/PageCompose";
-import { FileInputButton } from "../components/Form/FileInputButton";
+import { FileInput } from "../components/Form/FileInput";
 import { uploadFileRequest } from "../domains/upload.services";
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
         justify="center"
         align="center"
       >
-        <FileInputButton
+        <FileInput
           label="Upload Single File"
           uploadFileName="files"
           onChange={onChange}
