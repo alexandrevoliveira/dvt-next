@@ -20,7 +20,7 @@ export default function Home() {
         align="center"
       >
         <FileInput
-          label="Upload Single File"
+          label="Upload Single CSV File"
           uploadFileName="files"
           onChange={onChange}
         />
