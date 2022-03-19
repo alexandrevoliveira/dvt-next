@@ -22,12 +22,15 @@ apiRoute.use(uploadConfig.array('files'));
 
 apiRoute.post((req: NextConnectApiRequest, res: NextApiResponse<ResponseData>) => {
   const filenames = fs.readdirSync(filesUploadDestination);
-  const filesContentResult = filenames.map((name) => {
+  const filesContentResult = filenames.map((name, index) => {
     const fileBuffer = fs.readFileSync(`${filesUploadDestination}/${name}`)
     const fileContent = fileBuffer.toString("utf-8")
     const fileSplit = fileContent.split("\n").map(file => file.split(","))
+    const fileSlice = fileSplit.slice(0, fileSplit.length - 1)
     
-    return fileSplit.slice(0, fileSplit.length - 1)
+    return {
+      [filenames[index]]: fileSlice
+    }
   }); 
 
   res.status(200).json({ data: filesContentResult });
