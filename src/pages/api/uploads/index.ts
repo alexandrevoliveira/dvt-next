@@ -1,13 +1,13 @@
+import { ApiResponse } from '../../../models/ApiResponse';
+import { filesUploadDestination, uploadConfig } from '../../../config/uploadConfig';
 import { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
 import fs from 'fs';
-import { ApiResponse } from '../../../models/ApiResponse';
-import { filesUploadDestination, uploadConfig } from '../../../config/uploadConfig';
 
 interface NextConnectApiRequest extends NextApiRequest {
   files: Express.Multer.File[];
 }
-type ResponseData = ApiResponse<string[], string>;
+type ResponseData = ApiResponse<string[] | any[], string>;
 
 const apiRoute = nextConnect({
   onError(error, req: NextConnectApiRequest, res: NextApiResponse<ResponseData>) {
@@ -22,9 +22,15 @@ apiRoute.use(uploadConfig.array('files'));
 
 apiRoute.post((req: NextConnectApiRequest, res: NextApiResponse<ResponseData>) => {
   const filenames = fs.readdirSync(filesUploadDestination);
-  const images = filenames.map((name) => name);
+  const filesContentResult = filenames.map((name) => {
+    const fileBuffer = fs.readFileSync(`${filesUploadDestination}/${name}`)
+    const fileContent = fileBuffer.toString("utf-8")
+    const fileSplit = fileContent.split("\n").map(file => file.split(","))
+    
+    return fileSplit.slice(0, fileSplit.length - 1)
+  }); 
 
-  res.status(200).json({ data: images });
+  res.status(200).json({ data: filesContentResult });
 });
 
 export const config = {
