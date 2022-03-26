@@ -27,9 +27,10 @@ apiRoute.post((req: NextConnectApiRequest, res: NextApiResponse<ResponseData>) =
     const fileContent = fileBuffer.toString("utf-8")
     const fileSplit = fileContent.split("\n").map(file => file.split(","))
     const fileSlice = fileSplit.slice(0, fileSplit.length - 1)
+    const fileMap = fileSlice.map(line => line.map(column => column.replace("\r", "")))
     
     return {
-      [filenames[index]]: fileSlice
+      [filenames[index]]: fileMap
     }
   }); 
 
