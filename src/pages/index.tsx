@@ -1,9 +1,9 @@
-import { Icon, Select, Stack, Text } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { PageCompose } from "../components/Compose/PageCompose";
 import { FileInput } from "../components/Form/FileInput";
 import { getUploadedFiles, uploadFileRequest } from "../domains/upload.services";
-import { MdArrowDropDown } from "react-icons/md";
+import { CustomCSVSelect } from "../components/Select/CustomCSVSelect";
 
 interface FileProps {
   name: string;
@@ -12,6 +12,7 @@ interface FileProps {
 
 export default function Home() {
   const [filesData, setFilesData] = useState<any[]>()
+  const [file, setFile] = useState<FileProps>()
 
   const onChange = async (formData: FormData) => {
     const response = await uploadFileRequest(formData, (event) => {
@@ -27,7 +28,7 @@ export default function Home() {
       setFilesData(res.data)
     })
   }, [])
-  console.log(filesData)
+  console.log(file)
   
   return (
     <PageCompose header_title="VET | Home">
@@ -42,26 +43,11 @@ export default function Home() {
           onChange={onChange}
         />
 
-        <Select
-          bgColor="white"
-          color="black"
-          icon={<Icon as={MdArrowDropDown}/>}
-          placeholder='Select the file'>
-          { filesData?.map((file: FileProps, index) => {
-            return (
-              <option 
-                key={index}
-                // value={file.name}
-                style={{
-                  color: "black",
-                  backgroundColor: "white"
-                }}
-              >
-                {file.name}
-              </option>
-            )
-          }) }
-        </Select>
+        <CustomCSVSelect
+          value={file}
+          items={filesData}
+          onChange={(newValue) => setFile(newValue)}
+        />
       </Stack>
     </PageCompose>
   )
