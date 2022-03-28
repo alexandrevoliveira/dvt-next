@@ -14,3 +14,9 @@ export const uploadFileRequest = async (
 
   return response.data;
 };
+
+export const getUploadedFiles = async (): Promise<ApiResponse<string[]>> => {
+  const response = await axios.get('/api/uploads/list');
+
+  return response.data;
+};
