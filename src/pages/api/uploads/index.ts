@@ -9,6 +9,11 @@ interface NextConnectApiRequest extends NextApiRequest {
 }
 type ResponseData = ApiResponse<string[] | any[], string>;
 
+interface FileData {
+  name: string;
+  rows: any[];
+}
+
 const apiRoute = nextConnect({
   onError(error, req: NextConnectApiRequest, res: NextApiResponse<ResponseData>) {
     res.status(501).json({ error: `Sorry something went wrong! ${error.message}` });
@@ -21,20 +26,21 @@ const apiRoute = nextConnect({
 apiRoute.use(uploadConfig.array('files'));
 
 apiRoute.post((req: NextConnectApiRequest, res: NextApiResponse<ResponseData>) => {
+  const filesData: FileData[] = []
   const filenames = fs.readdirSync(filesUploadDestination);
-  const filesContentResult = filenames.map((name, index) => {
+  
+  filenames.forEach((name, index) => {
     const fileBuffer = fs.readFileSync(`${filesUploadDestination}/${name}`)
     const fileContent = fileBuffer.toString("utf-8")
     const fileSplit = fileContent.split("\n").map(file => file.split(","))
-    const fileSlice = fileSplit.slice(0, fileSplit.length)
-    const fileMap = fileSlice.map(line => line.map(column => column.replace("\r", "")))
-    
-    return {
-      [filenames[index]]: fileMap
-    }
+    const fileMap = fileSplit.map(line => line.map(column => column.replace("\r", "")))
+    filesData.push({
+      name: filenames[index],
+      rows: fileMap
+    })
   }); 
 
-  res.status(200).json({ data: filesContentResult });
+  res.status(200).json({ data: filesData });
 });
 
 export const config = {
