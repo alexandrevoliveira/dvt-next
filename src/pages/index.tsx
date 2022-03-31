@@ -4,15 +4,17 @@ import { PageCompose } from "../components/Compose/PageCompose";
 import { FileInput } from "../components/Form/FileInput";
 import { getUploadedFiles, uploadFileRequest } from "../domains/upload.services";
 import { CustomCSVSelect } from "../components/Select/CustomCSVSelect";
+import { shapeCSVLines } from "../utils/helpers";
 
 interface FileProps {
   name: string;
-  rows: string[];
+  rows: string[][];
 }
 
 export default function Home() {
   const [filesData, setFilesData] = useState<any[]>()
   const [file, setFile] = useState<FileProps>()
+  const [fileObject, setFileObject] = useState({})
 
   const onChange = async (formData: FormData) => {
     const response = await uploadFileRequest(formData, (event) => {
@@ -28,7 +30,11 @@ export default function Home() {
       setFilesData(res.data)
     })
   }, [])
-  console.log(file)
+  
+  useEffect(() => {
+    file ? setFileObject(shapeCSVLines(file.rows)) : null;
+  }, [file])
+  console.log(fileObject)
   
   return (
     <PageCompose header_title="VET | Home">
