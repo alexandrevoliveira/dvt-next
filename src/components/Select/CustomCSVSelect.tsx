@@ -3,7 +3,7 @@ import { MdArrowDropDown } from "react-icons/md";
 
 interface FileProps {
   name: string;
-  rows: string[];
+  rows: string[][];
 }
 
 interface SelectProps {
