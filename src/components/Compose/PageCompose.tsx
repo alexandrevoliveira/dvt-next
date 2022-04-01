@@ -1,20 +1,31 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Stack, StackProps } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Header } from "../Header";
 
-interface PageComposeProps {
+interface PageComposeProps extends StackProps {
   header_title?: string;
   children: ReactNode;
 }
 
-export function PageCompose ({ header_title, children }: PageComposeProps) {
+export function PageCompose({ header_title, children, ...rest }: PageComposeProps) {
   return (
     <Box>
       <Header title={header_title} />
 
-      <Flex w="100%" maxWidth="100%" mx="auto" px="6">
+      <Stack
+        w="100%"
+        maxWidth="100%"
+        my="6"
+        mx="auto"
+        px={"6"}
+        justify="space-evenly"
+        align="center"
+        direction={["column" ,"row"]}
+        spacing={["8", "10"]}
+        {...rest}
+      >
         { children }
-      </Flex>
+      </Stack>
     </Box>
   )
 }
