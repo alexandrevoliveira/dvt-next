@@ -5,6 +5,7 @@ import { FileInput } from "../components/Form/FileInput";
 import { getUploadedFiles, uploadFileRequest } from "../domains/upload.services";
 import { CustomCSVSelect } from "../components/Select/CustomCSVSelect";
 import { shapeCSVLines } from "../utils/helpers";
+import Dashboard from "../components/Dashboard";
 
 interface FileProps {
   name: string;
@@ -28,20 +29,20 @@ export default function Home() {
     const response = getUploadedFiles()
     Promise.resolve(response).then(res => {
       setFilesData(res.data)
-    })
+    }).catch(err => console.error(err))
   }, [])
   
   useEffect(() => {
     file ? setFileObject(shapeCSVLines(file.rows)) : null;
   }, [file])
-  console.log(fileObject)
   
   return (
-    <PageCompose header_title="VET | Home">
+    <PageCompose header_title="VET | Home" direction="column" spacing={"12"}>
       <Stack
         mt={4}
-        justify="space-between"
         align="center"
+        direction={["column" ,"row"]}
+        spacing={[4, 16]}
       >
         <FileInput
           label="Upload Single CSV File"
@@ -55,6 +56,10 @@ export default function Home() {
           onChange={(newValue) => setFile(newValue)}
         />
       </Stack>
+      
+      {file && (<Stack w="100%" maxW="680px" h="100%">
+        <Dashboard name={file?.name} object={fileObject}/>
+      </Stack>)}
     </PageCompose>
   )
 }
