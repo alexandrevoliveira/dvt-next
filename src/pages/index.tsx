@@ -37,29 +37,31 @@ export default function Home() {
   }, [file])
   
   return (
-    <PageCompose header_title="VET | Home" direction="column" spacing={"12"}>
-      <Stack
-        mt={4}
-        align="center"
-        direction={["column" ,"row"]}
-        spacing={[4, 16]}
-      >
-        <FileInput
-          label="Upload Single CSV File"
-          uploadFileName="files"
-          onChange={onChange}
-        />
+    <PageCompose header_title="VET | Home">
+      <Stack direction="column" spacing={[4, 6]}>
+        <Stack
+          mt={4}
+          align="center"
+          direction={["column" ,"row"]}
+          spacing={[4, 16]}
+        >
+          <FileInput
+            label="Upload Single CSV File"
+            uploadFileName="files"
+            onChange={onChange}
+          />
 
-        <CustomCSVSelect
-          value={file}
-          items={filesData}
-          onChange={(newValue) => setFile(newValue)}
-        />
+          <CustomCSVSelect
+            value={file}
+            items={filesData}
+            onChange={(newValue) => setFile(newValue)}
+          />
+        </Stack>
+        
+        {file && (<Stack w="100%" maxW="680px" h="100%">
+          <Dashboard name={file?.name} object={fileObject}/>
+        </Stack>)}
       </Stack>
-      
-      {file && (<Stack w="100%" maxW="680px" h="100%">
-        <Dashboard name={file?.name} object={fileObject}/>
-      </Stack>)}
     </PageCompose>
   )
 }

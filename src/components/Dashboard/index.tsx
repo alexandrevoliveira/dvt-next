@@ -113,18 +113,18 @@ export default function Dashboard({ name, object }: DashboardProps) {
 
       <Stack direction={["row"]} align="center" spacing={[4, 16]}>
         <CustomObjectSelect
-          title="Column"
-          placeholder="Column"
-          value={column}
-          items={Object.keys(object)}
-          onChange={newValue => setColumn(newValue)}
-        />
-        <CustomObjectSelect
           title="Row"
           placeholder="Row"
           value={row}
           items={Object.keys(object)}
           onChange={newValue => setRow(newValue)}
+        />
+        <CustomObjectSelect
+          title="Column"
+          placeholder="Column"
+          value={column}
+          items={Object.keys(object)}
+          onChange={newValue => setColumn(newValue)}
         />
       </Stack>
     </Stack>
