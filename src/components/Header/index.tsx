@@ -1,7 +1,8 @@
-import { Flex, Icon, IconButton, useBreakpointValue } from "@chakra-ui/react";
+import { Icon, IconButton, Stack, useBreakpointValue } from "@chakra-ui/react";
 import Head from "next/head";
 import { RiMenuLine } from "react-icons/ri";
 import { useSidebarDrawer } from "../../contexts/SidebarDrawerContext";
+import { SignInButton } from "../SignInButton";
 import { Logo } from "./Logo";
 
 interface HeaderProps {
@@ -22,7 +23,8 @@ export function Header({ title = 'VET' }: HeaderProps) {
         <title>{title}</title>
       </Head>
 
-      <Flex
+      <Stack
+        direction="row"
         as="header"
         w="100%"
         maxWidth="100%"
@@ -44,9 +46,17 @@ export function Header({ title = 'VET' }: HeaderProps) {
             mr="2"
           />
         )}
+        <Stack
+          flex="1"
+          align="center"
+          justify="center"
+          direction="row"
+        >
+          <Logo />
 
-        <Logo />
-      </Flex>
+          <SignInButton />
+        </Stack>
+      </Stack>
     </>
   )
 }
