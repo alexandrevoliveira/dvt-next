@@ -15,6 +15,7 @@
     "@hookform/resolvers": "^2.8.8",
     "apexcharts": "^3.34.0",
     "axios": "^0.26.1",
+    "faunadb": "^4.5.4",
     "framer-motion": "^6.2.8",
     "multer": "^1.4.4",
     "next": "12.1.0",
