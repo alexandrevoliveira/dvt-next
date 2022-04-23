@@ -50,7 +50,7 @@ export default function Dashboard({ name, object }: DashboardProps) {
     },
     xaxis: {
       type: 'category',
-      categories: object[row],
+      categories: object[row] ? object[row] : [1, 2, 3, 4, 5],
       axisBorder: {
         color: theme.colors.gray[600]
       },
@@ -93,7 +93,7 @@ export default function Dashboard({ name, object }: DashboardProps) {
   };
   
   const series = [
-    { name: name, data: object[column]},
+    { name: name, data: object[column] ? object[column] : [1, 2, 3, 4, 5]},
   ];
 
   return (
