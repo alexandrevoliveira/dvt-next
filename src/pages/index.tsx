@@ -4,7 +4,7 @@ import { PageCompose } from "../components/Compose/PageCompose";
 import { FileInput } from "../components/Form/FileInput";
 import { getUploadedFiles, uploadFileRequest } from "../domains/upload.services";
 import { CustomCSVSelect } from "../components/Select/CustomCSVSelect";
-import { shapeCSVLines } from "../utils/helpers";
+import { shapeCSVLines, shapeEvasionCSVLines } from "../utils/helpers";
 import Dashboard from "../components/Dashboard";
 
 interface FileProps {
@@ -33,17 +33,25 @@ export default function Home() {
   }, [])
   
   useEffect(() => {
-    file ? setFileObject(shapeCSVLines(file.rows)) : null;
+    if (file) {
+      const column_names = file.rows[0] as string[]
+      column_names.includes('Período Ingresso') ?
+        setFileObject(shapeEvasionCSVLines(file.rows))
+        : setFileObject(shapeCSVLines(file.rows))
+
+    } else {
+      return null
+    };
   }, [file])
   
   return (
     <PageCompose header_title="VET | Home">
-      <Stack direction="column" spacing={[4, 6]}>
+      <Stack flex="1" direction="column" spacing={[4, 4, 4, 4, 6]} justify="center" align="center">
         <Stack
           mt={4}
           align="center"
-          direction={["column" ,"row"]}
-          spacing={[4, 16]}
+          direction={["column", "column", "column", "column" ,"row"]}
+          spacing={[4, 4, 4, 4, 16]}
         >
           <FileInput
             label="Upload Single CSV File"
