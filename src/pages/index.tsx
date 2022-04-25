@@ -35,7 +35,9 @@ export default function Home() {
   useEffect(() => {
     if (file) {
       const column_names = file.rows[0] as string[]
-      column_names.includes('Período Ingresso') ?
+      column_names.includes('Período Ingresso')
+      && column_names.includes('Semestre da Evasão')
+      && column_names.includes('Número de evadidos por turma') ?
         setFileObject(shapeEvasionCSVLines(file.rows))
         : setFileObject(shapeCSVLines(file.rows))
 
