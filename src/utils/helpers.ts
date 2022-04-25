@@ -9,9 +9,10 @@ export const shapeCSVLines = (array: string[][]) => {
           })
         })
       : array[rowIndex].forEach((column, columnIndex) => {
+        const column_name = object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]
         typeof(column) !== 'string' ?
-          object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]?.push('')
-          : object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]?.push(column)
+          column_name?.push('')
+          : column_name?.push(column)
       })
     })
   
@@ -27,10 +28,11 @@ export const shapeCSVLines = (array: string[][]) => {
       rowIndex === 0 ? 
         array[rowIndex].forEach((column) => {
           if(column) {
-            evasionColumns.includes(column.replace(/\s/g, "_").toLowerCase()) ?
+            const column_name = column.replace(/\s/g, "_").toLowerCase()
+            evasionColumns.includes(column_name) ?
               Object.assign(object, {
                 ...object,
-                [column.replace(/\s/g, "_").toLowerCase()]: [] as string[]
+                [column_name]: [] as string[]
               }) : null;
           } else{            
             Object.assign(object, {
@@ -40,11 +42,12 @@ export const shapeCSVLines = (array: string[][]) => {
           }
         })
       : array[rowIndex].forEach((column, columnIndex) => {
-        if (object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]){
+        const column_name = object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]
+        if (column_name){
           if (typeof(column) !== 'string') {
-            object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]?.push('')
+            column_name?.push('')
           } else {
-            object[`${array[0][columnIndex]}`.replace(/\s/g, "_").toLowerCase()]?.push(column)
+            column_name?.push(column)
           }
         } else {
           return null;
@@ -86,9 +89,10 @@ export const shapeCSVLines = (array: string[][]) => {
 
     // here the 'ingresso_evasao_total' column will have each repeated value of 
     // index 0 and 1 combined, reduced with the 2nd index summed
-    const ing_ev_tot_reduced = 
+    const ing_ev_tot_reduced: any[] = 
       ing_ev_tot_array.reduce((ing_ev_tot_filtered: any[], ing_ev_tot: any[]) => {
-        if (((ing_ev_tot[0] && ing_ev_tot[1]) !== '' || undefined) && ing_ev_tot[2] !== null) {
+        if (((ing_ev_tot[0] && ing_ev_tot[1]) !== '' || undefined)
+          && (ing_ev_tot[2] !== null  && ing_ev_tot[2] < 300)) {
           const found = ing_ev_tot_filtered.some(iet => iet[0] === ing_ev_tot[0] && iet[1] === ing_ev_tot[1])
   
           if (!found) {
@@ -103,9 +107,12 @@ export const shapeCSVLines = (array: string[][]) => {
           return ing_ev_tot_filtered
         }
       }, [])
+
+    // sorting the array by the 1st column and then by the 2nd column
+    const ing_ev_tot_sorted = ing_ev_tot_reduced.sort().sort((a,b) => a[1] - b[1])
         
     return {
-      ['ingresso_evasao']: ing_ev_tot_reduced.map((value: any[]) => `${value[0]}-${value[1]}`),
-      ['total']: ing_ev_tot_reduced.map((value: any[]) => Number(`${value[2]}`)),
+      ['ingresso_evasao']: ing_ev_tot_sorted.map((value: any[]) => `${value[0]}-${value[1]}`),
+      ['total']: ing_ev_tot_sorted.map((value: any[]) => Number(`${value[2]}`)),
     }
   }
