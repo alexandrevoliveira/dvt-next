@@ -17,7 +17,7 @@ interface DashboardProps{
   object?: ObjectProps<any>;
 }
 
-export default function Dashboard({ name, object }: DashboardProps) {
+export default function LineDashboard({ name, object }: DashboardProps) {
   const [row, setRow] = useState<string>()
   const [column, setColumn] = useState<string>()
     
@@ -31,16 +31,13 @@ export default function Dashboard({ name, object }: DashboardProps) {
           zoomout: false,
         },
       },
-
       zoom: {
         enabled: true,
       },
-      foreColor: theme.colors.gray[900],
-      type: "area",
+      type: "line",
     },
     grid: {
       show: true,
-      borderColor: theme.colors.gray[300]
     },
     dataLabels: {
       enabled: true,
@@ -51,12 +48,6 @@ export default function Dashboard({ name, object }: DashboardProps) {
     xaxis: {
       type: 'category',
       categories: object[row] ? object[row] : [1, 2, 3, 4, 5],
-      axisBorder: {
-        color: theme.colors.gray[600]
-      },
-      axisTicks: {
-        color: theme.colors.gray[600],
-      },
       title: {
         text: row,
         style: {
@@ -66,12 +57,6 @@ export default function Dashboard({ name, object }: DashboardProps) {
       }
     },
     yaxis: {
-      axisBorder: {
-        color: theme.colors.black[900]
-      },
-      axisTicks: {
-        color: theme.colors.gray[600]
-      },
       title: {
         text: column,
         style: {
@@ -79,15 +64,6 @@ export default function Dashboard({ name, object }: DashboardProps) {
           fontWeight: "bold"
         },
       },
-    },
-    fill: {
-      opacity: 0.3,
-      type: 'gradient',
-      gradient: {
-        shade: 'dark',
-        opacityFrom: 0.7,
-        opacityTo: 0.3
-      }
     },
     colors: ['#8257E5'],
   };
@@ -108,7 +84,7 @@ export default function Dashboard({ name, object }: DashboardProps) {
         height="fit-content"
       >
         <Text fontSize="lg" mb="4" color="purple.dvt-dark">{name}</Text>
-        <Chart options={options} series={series} type="area" />
+        <Chart options={options} series={series} type="line" />
       </Box>
 
       <Stack direction={["row"]} align="center" spacing={[4, 16]}>
