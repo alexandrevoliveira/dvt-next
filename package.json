@@ -1,6 +1,6 @@
 {
-  "name": "vet-next",
-  "version": "1.0.0",
+  "name": "dvt-next",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
