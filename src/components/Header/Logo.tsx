@@ -11,16 +11,18 @@ export function Logo() {
         w="64"
         textTransform="uppercase"
         textAlign="center"
+        color="gray.50"
       >
         dvt
-        <Text as="span" ml="1" color="pink.400">.</Text>
+        <Text as="span" ml="1" color="purple.dvt-light">.</Text>
       </Text>
 
       <Text
         lineHeight="1"
         letterSpacing=".6px"
-        color="purple.dvt-light"
+        color="pink.400"
         textAlign="center"
+        fontFamily="Ubuntu"
       >
         Ferramenta de<br />visualização de dados
       </Text>

@@ -9,7 +9,7 @@ interface HeaderProps {
   title?: string;
 }
 
-export function Header({ title = 'VET' }: HeaderProps) {
+export function Header({ title = 'DVT' }: HeaderProps) {
   const { onOpen } = useSidebarDrawer();
 
   const isWideVersion = useBreakpointValue({
@@ -39,7 +39,7 @@ export function Header({ title = 'VET' }: HeaderProps) {
         { !isWideVersion && (
           <IconButton
             aria-label="Open navigation"
-            icon={<Icon as={RiMenuLine} />}
+            icon={<Icon as={RiMenuLine} color="gray.50"/>}
             fontSize="24"
             variant="unstyled"
             onClick={onOpen}

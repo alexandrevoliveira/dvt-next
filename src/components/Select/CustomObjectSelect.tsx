@@ -12,7 +12,11 @@ interface SelectProps {
 export function CustomObjectSelect({ title, placeholder, value, items, onChange}: SelectProps) {
   return(
     <Stack>
-      {title && (<Text fontWeight="normal" fontSize={[20, 22]}>{title}</Text>)}
+      {title && (
+        <Text fontWeight="normal" fontSize={[20, 22]} color="gray.50">
+          {title}
+        </Text>
+      )}
       <Menu>
         <MenuButton
           letterSpacing=".7px"
