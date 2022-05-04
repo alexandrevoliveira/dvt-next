@@ -18,7 +18,6 @@ export default function AreaDashboardPage() {
   const [filesData, setFilesData] = useState<any[]>()
   const [file, setFile] = useState<FileProps>()
   const [fileObject, setFileObject] = useState({})
-  console.log(file)
 
   const onChange = async (formData: FormData) => {
     const response = await uploadFileRequest(formData, (event) => {

@@ -92,7 +92,9 @@ export const shapeCSVLines = (array: string[][]) => {
     const ing_ev_tot_reduced: any[] = 
       ing_ev_tot_array.reduce((ing_ev_tot_filtered: any[], ing_ev_tot: any[]) => {
         if (((ing_ev_tot[0] && ing_ev_tot[1]) !== '' || undefined)
-          && (ing_ev_tot[2] !== null  && ing_ev_tot[2] < 300)) {
+          && (ing_ev_tot[2] !== null && ing_ev_tot[2] < 300)
+          && (Number(ing_ev_tot[0]) < Number(ing_ev_tot[1]))
+        ) {
           const found = ing_ev_tot_filtered.some(iet => iet[0] === ing_ev_tot[0] && iet[1] === ing_ev_tot[1])
   
           if (!found) {
@@ -108,11 +110,42 @@ export const shapeCSVLines = (array: string[][]) => {
         }
       }, [])
 
+    // here the dropout rate will be calculated according to the number of
+    // students who entered during that period of time
+    const ing_ev_tot_result = ing_ev_tot_reduced.map((iet: any[]): any[] => {
+      const entry_period: string = iet[0]
+      const semester_dropout: string = iet[1]
+      const students_dropout_amount: number = iet[2]
+
+      // as required the number of students who entered per semester is equal 50
+      const number_of_students_entered_per_period = 50
+
+      let entry_period_as_number = 0
+      let semester_dropout_as_number = 0
+
+      // if the period is the 2nd of the year we add .8 otherwise .4 since the
+      // other period would be the 1st. This happens to get the correct 
+      // difference between periods
+      entry_period.includes(".2") ?
+        entry_period_as_number = Number(entry_period) + 0.8
+        : entry_period_as_number = Number(entry_period) + 0.4
+      
+      semester_dropout.includes(".2") ?
+        semester_dropout_as_number = Number(semester_dropout) + 0.8
+        : semester_dropout_as_number = Number(semester_dropout) + 0.4
+
+      const evasion_time_in_periods = (semester_dropout_as_number - entry_period_as_number) * 2
+      const total_number_of_students_entered = evasion_time_in_periods * number_of_students_entered_per_period
+      
+      const evasion_rate = students_dropout_amount / total_number_of_students_entered
+      return [entry_period, semester_dropout, evasion_rate]
+    })
+
     // sorting the array by the 1st column and then by the 2nd column
-    const ing_ev_tot_sorted = ing_ev_tot_reduced.sort().sort((a,b) => a[1] - b[1])
+    const ing_ev_tot_sorted = ing_ev_tot_result.sort().sort((a,b) => a[1] - b[1])
         
     return {
       ['ingresso_evasao']: ing_ev_tot_sorted.map((value: any[]) => `${value[0]}-${value[1]}`),
-      ['total']: ing_ev_tot_sorted.map((value: any[]) => Number(`${value[2]}`)),
+      ['taxa_evasao']: ing_ev_tot_sorted.map((value: any[]) => Number(`${value[2]}`)),
     }
   }
