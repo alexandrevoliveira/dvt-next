@@ -98,7 +98,9 @@ export const shapeCSVLines = (array: string[][]) => {
           const found = ing_ev_tot_filtered.some(iet => iet[0] === ing_ev_tot[0] && iet[1] === ing_ev_tot[1])
   
           if (!found) {
-            ing_ev_tot_filtered.push(ing_ev_tot)
+            ing_ev_tot[2] > 50 ?
+              ing_ev_tot_filtered
+              : ing_ev_tot_filtered.push(ing_ev_tot)
           } else {
             const foundElement = ing_ev_tot_filtered.find(iet => iet[0] === ing_ev_tot[0] && iet[1] === ing_ev_tot[1])
             foundElement[2] += ing_ev_tot[2]
