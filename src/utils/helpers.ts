@@ -22,8 +22,7 @@ export const shapeCSVLines = (array: string[][]) => {
   export const shapeEvasionCSVLines = (array: string[][]) => {
     const object = {}
     const evasionColumns = ['período_ingresso', 'semestre_da_evasão', 'número_de_evadidos_por_turma']
-    // here i start by filtering which columns will be worked on, and also 
-    // create a new column named 'ingresso_evasao_total'
+    // here i start by filtering which columns will be worked on 
     array.forEach((row, rowIndex) => {
       rowIndex === 0 ? 
         array[rowIndex].forEach((column) => {
@@ -34,11 +33,6 @@ export const shapeCSVLines = (array: string[][]) => {
                 ...object,
                 [column_name]: [] as string[]
               }) : null;
-          } else{            
-            Object.assign(object, {
-              ...object,
-              ['ingresso_evasao_total']: []
-            })
           }
         })
       : array[rowIndex].forEach((column, columnIndex) => {
@@ -53,6 +47,12 @@ export const shapeCSVLines = (array: string[][]) => {
           return null;
         }
       })
+    })
+    
+    // here i create a new column named 'ingresso_evasao_total'
+    Object.assign(object, {
+      ...object,
+      ['ingresso_evasao_total']: []
     })
 
     const ing_ev_tot_array = object['ingresso_evasao_total'] as any[]
@@ -92,7 +92,7 @@ export const shapeCSVLines = (array: string[][]) => {
     const ing_ev_tot_reduced: any[] = 
       ing_ev_tot_array.reduce((ing_ev_tot_filtered: any[], ing_ev_tot: any[]) => {
         if (((ing_ev_tot[0] && ing_ev_tot[1]) !== '' || undefined)
-          && (ing_ev_tot[2] !== null && ing_ev_tot[2] < 300)
+          && (ing_ev_tot[2] !== null)
           && (Number(ing_ev_tot[0]) < Number(ing_ev_tot[1]))
         ) {
           const found = ing_ev_tot_filtered.some(iet => iet[0] === ing_ev_tot[0] && iet[1] === ing_ev_tot[1])
@@ -137,12 +137,20 @@ export const shapeCSVLines = (array: string[][]) => {
       const evasion_time_in_periods = (semester_dropout_as_number - entry_period_as_number) * 2
       const total_number_of_students_entered = evasion_time_in_periods * number_of_students_entered_per_period
       
-      const evasion_rate = students_dropout_amount / total_number_of_students_entered
-      return [entry_period, semester_dropout, evasion_rate]
+      if (students_dropout_amount > total_number_of_students_entered) {
+        return null
+      } else {
+        const evasion_rate = students_dropout_amount / total_number_of_students_entered
+        return [entry_period, semester_dropout, evasion_rate]
+      }
     })
 
-    // sorting the array by the 1st column and then by the 2nd column
-    const ing_ev_tot_sorted = ing_ev_tot_result.sort().sort((a,b) => a[1] - b[1])
+    // removing undefined values and sorting the array by the 1st column and then by the 2nd column
+    const ing_ev_tot_sorted = ing_ev_tot_result.filter(value => {
+      if (value !== undefined) {
+        return value
+      } else return
+    }).sort((a,b) => b[2] - a[2])
         
     return {
       ['ingresso_evasao']: ing_ev_tot_sorted.map((value: any[]) => `${value[0]}-${value[1]}`),
